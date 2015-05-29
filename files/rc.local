@@ -1,0 +1,5 @@
+#!/bin/sh -e
+
+/etc/init.d/mysql start
+
+exit 0
