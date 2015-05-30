@@ -5,7 +5,7 @@ RUN echo 'mysql-server-5.5 mysql-server/root_password password abc123'|debconf-s
 RUN echo 'mysql-server-5.5 mysql-server/root_password_again password abc123'|debconf-set-selections
 
 # Install node, mysql, etc.
-RUN curl -sL https://deb.nodesource.com/setup | bash -
+RUN curl -sL https://deb.nodesource.com/setup_dev | bash -
 RUN apt-get install -y unzip build-essential nodejs ruby2.0 ruby2.0-dev git \
                        libsqlite3-dev libmysqlclient-dev mysql-server \
                        nginx
