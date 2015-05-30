@@ -1,8 +1,8 @@
 FROM phusion/baseimage
 
 # Initialize mysql password to abc123
-RUN echo 'mysql-server-5.5 mysql-server/root_password password abc123'|debconf-set-selections
-RUN echo 'mysql-server-5.5 mysql-server/root_password_again password abc123'|debconf-set-selections
+#RUN echo 'mysql-server-5.5 mysql-server/root_password password abc123'|debconf-set-selections
+#RUN echo 'mysql-server-5.5 mysql-server/root_password_again password abc123'|debconf-set-selections
 
 # Install node, mysql, etc.
 RUN curl -sL https://deb.nodesource.com/setup_dev | bash -
@@ -24,15 +24,16 @@ RUN gem install bundler
 RUN gem install mailcatcher
 
 # Install config override for mysql
-ADD files/mysql.cnf /etc/mysql/conf.d/override.cnf
+#ADD files/mysql.cnf /etc/mysql/conf.d/override.cnf
 
 # Ensure remote access is enabled for MySQL
 RUN /etc/init.d/mysql start && \
-    mysql -u root -pabc123 -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION; FLUSH PRIVILEGES;" && \
+    mysql -u root -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION; FLUSH PRIVILEGES;" && \
     /etc/init.d/mysql stop
 
 # (Use prefix zX. to explicitly order startup files)
 ADD files/runit/mailcatcher.sh /etc/service/z0.mailcatcher/run
+ADD files/runit/nginx.sh /etc/service/z1.nginx/run
 RUN find /etc/service -name "run" -type f -exec chmod a+x {} \;
 
 # Add rc.local
